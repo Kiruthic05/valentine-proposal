@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #e63980;
+            --light-pink: #ffeef5;
+            --text-dark: #4a4a4a;
+            --text-light: #7a7a7a;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart-bg::before,
+        .heart-bg::after {
+            content: '💕';
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.15;
+            animation: float 15s infinite;
+        }
+
+        .heart-bg::before {
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .heart-bg::after {
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(10deg);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .bear {
+            font-size: 120px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #d63384;
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .emoji-heart {
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            10%, 30% {
+                transform: scale(1.2);
+            }
+            20%, 40% {
+                transform: scale(1);
+            }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+            font-family: 'Quicksand', sans-serif;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(245, 87, 108, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #f5576c;
+            border: 3px solid #f5576c;
+        }
+
+        .btn-secondary:hover {
+            background: #fff5f7;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary-pink);
+            border: 2px solid var(--primary-pink);
+            box-shadow: none;
+            padding: 15px 40px;
+            font-size: 16px;
+        }
+
+        .btn-outline:hover {
+            background: var(--light-pink);
+        }
+
+        /* Pros and Cons page */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .comparison-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border: 3px solid;
+            min-height: 250px;
+        }
+
+        .comparison-card.pros {
+            border-color: #f093fb;
+            background: linear-gradient(135deg, #fff 0%, #fff0fb 100%);
+        }
+
+        .comparison-card.cons {
+            border-color: #ffc0cb;
+            background: linear-gradient(135deg, #fff 0%, #fff9fa 100%);
+        }
+
+        .comparison-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-title.pros {
+            color: #d63384;
+        }
+
+        .comparison-title.cons {
+            color: #f5576c;
+        }
+
+        .comparison-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .comparison-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .cons-image {
+            width: 100%;
+            max-width: 150px;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+
+        .cons-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f5576c;
+            margin-top: 10px;
+        }
+
+        /* Success page */
+        .confetti {
+            font-size: 50px;
+            position: absolute;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10%;
+                transform: translateX(0) rotate(0deg);
+            }
+            100% {
+                top: 110%;
+                transform: translateX(100px) rotate(360deg);
+            }
+        }
+
+        .success-title {
+            font-size: 56px;
+            margin-bottom: 10px;
+        }
+
+        .gift-section {
+            margin-top: 40px;
+            background: linear-gradient(135deg, #fff0fb 0%, #ffe0f0 100%);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px dashed #f093fb;
+        }
+
+        .gift-title {
+            font-size: 22px;
+            color: #d63384;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        /* Envelope Grid */
+        .envelope-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .envelope-card {
+            background: white;
+            border: 2px solid #ffd4e5;
+            border-radius: 20px;
+            padding: 35px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .envelope-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(230, 57, 128, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .envelope-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(230, 57, 128, 0.2);
+            border-color: var(--primary-pink);
+        }
+
+        .envelope-card:hover::before {
+            opacity: 1;
+        }
+
+        .envelope-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .envelope-label {
+            color: var(--text-dark);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Memories Page */
+        .memories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .memory-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .memory-card:hover {
+            transform: scale(1.05);
+        }
+
+        .memory-img {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #ffd4e5 0%, #ffe8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .memory-caption {
+            padding: 15px;
+            text-align: center;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        /* Letter Page */
+        .letter-content {
+            background: linear-gradient(to bottom, #fff 0%, #fffbfc 100%);
+            border: 1px solid #ffd4e5;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 650px;
+            margin: 30px auto;
+            text-align: left;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .letter-content p {
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            color: var(--primary-pink);
+            margin-top: 30px;
+        }
+
+        /* Why I Love You Page */
+        .love-reasons {
+            text-align: left;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        .reason-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--light-pink);
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .reason-item:hover {
+            transform: translateX(10px);
+        }
+
+        .checkmark {
+            color: var(--primary-pink);
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .reason-text {
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* Date Night Page */
+        .date-plan {
+            background: linear-gradient(135deg, #fff0f7 0%, #ffe8f0 100%);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 30px auto;
+            border: 2px dashed var(--primary-pink);
+        }
+
+        .date-plan-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .date-icon {
+            font-size: 30px;
+        }
+
+        .date-text {
+            color: var(--text-dark);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .success-message {
+            background: white;
+            border: 2px solid var(--primary-pink);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            color: var(--primary-pink);
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .card {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .subtitle {
+                font-size: 20px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .envelope-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 15px 35px;
+                font-size: 18px;
+            }
+
+            .letter-content,
+            .date-plan {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-bg"></div>
+    
+    <div class="container">
+        <!-- Page 1: Initial Question -->
+        <div id="page1" class="page active">
+            <div class="card">
+                <div class="bear">🐻</div>
+                <h1>Gokul</h1>
+                <p class="subtitle">Will you be my Valentine? <span class="emoji-heart">💕</span> <span class="emoji-heart">💗</span></p>
+                <button class="btn" onclick="showPage(2)">Yes! 💝</button>
+                <button class="btn btn-secondary" onclick="showPage(2)">Hmm, let me think... 🤔</button>
+            </div>
+        </div>
+
+        <!-- Page 2: Pros and Cons -->
+        <div id="page2" class="page">
+            <div class="card">
+                <h1 style="font-size: 32px; margin-bottom: 10px;">Why You Should Choose Me as Your Valentine</h1>
+                <p class="subtitle" style="font-size: 18px; margin-bottom: 20px;">💗</p>
+                
+                <div class="comparison-grid">
+                    <!-- Pros -->
+                    <div class="comparison-card pros">
+                        <div class="comparison-title pros">
+                            💗 Pros
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-icon">🐹</div>
+                            <div>Unlimited hugs & kisses (tax-free, occasionally <span style="font-size: 20px;">😁</span>)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-icon" style="font-size: 35px;">🤸</div>
+                            <div>Spontaneous adventures and fun moments whenever you want!</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-icon" style="font-size: 35px;">🍩</div>
+                            <div>Late-night snack runs and sharing all the best treats together</div>
+                        </div>
+                    </div>
+
+                    <!-- Cons -->
+                    <div class="comparison-card cons">
+                        <div class="comparison-title cons">
+                            ❌ Cons
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23f5f5f5' rx='15'/%3E%3Ctext x='100' y='100' font-size='60' text-anchor='middle' dominant-baseline='middle'%3E🤷‍♀️%3C/text%3E%3C/svg%3E" alt="person shrugging" class="cons-image">
+                            <div class="cons-text">Nothing!!!!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="showPage(3)">Okay, I'm convinced! 💕</button>
+                    <button class="btn btn-secondary" onclick="showPage(1)">Go back 👈</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: Success -->
+        <div id="page3" class="page">
+            <div class="card">
+                <div class="success-title">💗 YAYYYYY!!! 💗</div>
+                <p class="subtitle">That's the best decision you've ever made! 💗 😘</p>
+                
+                <div class="gift-section">
+                    <div class="gift-title">Click here for the Valentine gifts, Gokul</div>
+                    <button class="btn" onclick="showPage(4)">🎁 Get Your Valentine Gifts</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 4: Envelope Selection -->
+        <div id="page4" class="page">
+            <div class="card">
+                <h1 style="font-size: 38px;">Choose an envelope</h1>
+                <p class="subtitle" style="font-size: 18px;">Explore the little things I love about us</p>
+
+                <div class="envelope-grid">
+                    <div class="envelope-card" onclick="showPage('memories')">
+                        <span class="envelope-icon">📸</span>
+                        <div class="envelope-label">Our Memories</div>
+                    </div>
+                    
+                    <div class="envelope-card" onclick="showPage('letter')">
+                        <span class="envelope-icon">✉️</span>
+                        <div class="envelope-label">My Letter</div>
+                    </div>
+                    
+                    <div class="envelope-card" onclick="showPage('why')">
+                        <span class="envelope-icon">💗</span>
+                        <div class="envelope-label">Why I Love You</div>
+                    </div>
+                    
+                    <div class="envelope-card" onclick="showPage('date')">
+                        <span class="envelope-icon">📅</span>
+                        <div class="envelope-label">Date Night?</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <button class="btn btn-outline" onclick="showPage(1)">Back to Start</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Our Memories -->
+        <div id="pagememories" class="page">
+            <div class="card">
+                <h1 style="font-size: 38px;">Our Best Memories</h1>
+                <p class="subtitle" style="font-size: 18px;">Every moment with you is a treasure 💕</p>
+                
+                <div class="memories-grid">
+                    <div class="memory-card">
+                        <div class="memory-img"><img style="width:100%; height:100%; object-fit:cover;" src="1.jpeg"></div>
+                    </div>
+                    <div class="memory-card">
+                        <div class="memory-img"><img style="width:100%; height:100%; object-fit:cover;" src="2.jpeg"></div>
+                    </div>
+                    <div class="memory-card">
+                        <div class="memory-img"><img style="width:100%; height:100%; object-fit:cover;" src="3.jpeg"></div>
+                    </div>
+                    <div class="memory-card">
+                        <div class="memory-img"><img style="width:100%; height:100%; object-fit:cover;" src="4.jpeg"></div>
+                    </div>
+                    <div class="memory-card">
+                        <div class="memory-img"><img style="width:100%; height:100%; object-fit:cover;" src="5.jpeg"></div>
+                    </div>
+                    <div class="memory-card">
+                        <div class="memory-img"><img style="width:100%; height:100%; object-fit:cover;" src="6.jpeg"></div>
+                    </div>
+                    <div class="memory-card">
+                        <div class="memory-img"><img style="width:100%; height:100%; object-fit:cover;" src="7.jpeg"></div>
+                    </div>
+                    <div class="memory-card">
+                        <div class="memory-img"><img style="width:100%; height:100%; object-fit:cover;" src="8.jpeg"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-outline" onclick="showPage(4)">Back to Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: My Letter -->
+        <div id="pageletter" class="page">
+            <div class="card">
+                <h1 style="font-size: 38px;">My Letter to You</h1>
+                <p class="subtitle" style="font-size: 18px;">Words from my heart 💌</p>
+                
+                <div class="letter-content">
+
+                    <p>Happy Valentine's Day 💖</p>
+                    
+                    <p>Sometimes I still can't believe I get to say that to someone… to you.</p>
+                    
+                    <p>We've been long distance since September, and even though the miles haven't been easy, you've made every day feel warmer. Waiting until August feels long, but knowing it's you I'm waiting for makes it worth it. Every countdown, every late-night call, every little update from you reminds me that love doesn't fade just because of distance.</p>
+                    
+                    <p>I was never really interested in love. I didn't believe in it the way people talked about it. And then you came into my life and quietly proved you were different. You're cute in ways you don't even realize, funny without trying, protective without controlling, and caring in the most genuine way. You check on me, you think of me, you make me feel safe and chosen. You are truly my green forest, and I feel so lucky to be loved by you.</p>
+                    
+                    <p>I'm grateful I waited this long. Grateful for everything I went through before you, because it all led me to us. To you. You make love feel calm, secure, and real, something I never thought I would experience.</p>
+                    
+                    <p>Thank you for being my first boyfriend, my safe place, my favorite person. No matter how far apart we are right now, my heart is always with you. You really are my <strong>Kelamale kaiyil vantha katti thangam.</strong> 💝</p>
+                    
+                    <p>I can't wait for the day I finally get to hold you again. 🥰</p>
+                    
+                    <p>Happy Valentine's Day, my love. 💝💞</p>
+                    
+                    <div class="letter-signature">Always yours 💙</div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-outline" onclick="showPage(4)">Back to Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Why I Love You -->
+        <div id="pagewhy" class="page">
+            <div class="card">
+                <h1 style="font-size: 38px;">Why I Love You</h1>
+                <p class="subtitle" style="font-size: 18px;">Just a few of the infinite reasons 💗</p>
+                <div class="love-reasons">
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You always think of me first</div>
+                    </div>
+                    
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You make me laugh even on tired days</div>
+                    </div>
+                    
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You're my favorite notification</div>
+                    </div>
+                    
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You're cute and you know it (even if you pretend not to)</div>
+                    </div>
+                    
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You're funny in a natural, comforting way</div>
+                    </div>
+                    
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You care in actions, not just words</div>
+                    </div>
+                    
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You're calm, kind, and emotionally mature</div>
+                    </div>
+                    
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You protect my heart without caging it</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You make me feel chosen</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You showed me consistency without me asking</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You were patient with my pace and my past</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You loved me from far away and still made me feel close</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You made waiting worth it</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You became my first love in the most gentle way</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You feel like home, even across miles</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You are proof that everything I went through had meaning</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You are the reason I believe I waited for the right person</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">Because you turned my “I'm not into love” into “it's you” 🤍</div>
+                    </div>
+                    <div class="reason-item">
+                        <span class="checkmark">✓</span>
+                        <div class="reason-text">You're my green forest 🌱</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-outline" onclick="showPage(4)">Back to Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Date Night / Be My Valentine -->
+        <div id="pagedate" class="page">
+            <div class="card">
+                <h1 style="font-size: 38px;">Be My Valentine?</h1>
+                <p class="subtitle" style="font-size: 18px;">I have a plan for us:</p>
+                
+                <div class="date-plan">
+                    <div class="date-plan-item">
+                        <span class="date-icon">🍽️</span>
+                        <div class="date-text">Dinner at your favorite restaurant</div>
+                    </div>
+                    
+                    <div class="date-plan-item">
+                        <span class="date-icon">🌙</span>
+                        <div class="date-text">A romantic walk under the stars</div>
+                    </div>
+                    
+                    <div class="date-plan-item">
+                        <span class="date-icon">🎁</span>
+                        <div class="date-text">A special surprise I've been planning</div>
+                    </div>
+                    
+                    <div class="date-plan-item">
+                        <span class="date-icon">💕</span>
+                        <div class="date-text">Quality time, just you and me</div>
+                    </div>
+                </div>
+                
+                <div id="dateResponse" style="display: none;" class="success-message">
+                    Yay! It's a date! ❤️ I can't wait to spend this special day with you!
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="acceptDate()">Yes, I'd love to! 💕</button>
+                    <button class="btn btn-outline" onclick="showPage(4)">Back to Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageNum) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page (handle both number and string IDs)
+            const pageId = typeof pageNum === 'number' ? 'page' + pageNum : 'page' + pageNum;
+            const pageElement = document.getElementById(pageId);
+            
+            if (pageElement) {
+                pageElement.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+            
+            // Add confetti on success page
+            if (pageNum === 3) {
+                createConfetti();
+            }
+        }
+
+        function createConfetti() {
+            const container = document.querySelector('.container');
+            const emojis = ['💕', '💗', '💖', '💝', '🎉', '✨', '🌟', '💫'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 200);
+            }
+        }
+
+        // Accept date function
+        function acceptDate() {
+            document.getElementById('dateResponse').style.display = 'block';
+            
+            // Create confetti effect
+            const colors = ['#e63980', '#ff69b4', '#ffc0cb', '#ff1493'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    createDateConfetti(colors);
+                }, i * 50);
+            }
+        }
+
+        function createDateConfetti(colors) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = '-10px';
+            confetti.style.borderRadius = '50%';
+            confetti.style.zIndex = '9999';
+            confetti.style.pointerEvents = 'none';
+            document.body.appendChild(confetti);
+
+            let pos = -10;
+            let leftPos = parseFloat(confetti.style.left);
+            const fallSpeed = Math.random() * 3 + 2;
+            const drift = Math.random() * 2 - 1;
+
+            const interval = setInterval(() => {
+                pos += fallSpeed;
+                leftPos += drift;
+                confetti.style.top = pos + 'px';
+                confetti.style.left = leftPos + '%';
+
+                if (pos > window.innerHeight) {
+                    clearInterval(interval);
+                    confetti.remove();
+                }
+            }, 20);
+        }
+
+        // Add some extra floating hearts
+        const heartBg = document.querySelector('.heart-bg');
+        const moreHearts = ['❤️', '💕', '💗', '💖', '💝'];
+        for (let i = 0; i < 8; i++) {
+            const heart = document.createElement('div');
+            heart.style.position = 'absolute';
+            heart.style.fontSize = '30px';
+            heart.style.opacity = '0.1';
+            heart.style.top = Math.random() * 100 + '%';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.textContent = moreHearts[Math.floor(Math.random() * moreHearts.length)];
+            heart.style.animation = `float ${10 + Math.random() * 10}s infinite`;
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heartBg.appendChild(heart);
+        }
+    </script>
+</body>
+</html>
